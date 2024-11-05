@@ -1,0 +1,27 @@
+- name: Update /etc/apt/sources.list
+  hosts: debian2
+  become: yes
+  tasks:
+    - name: Закомментировать все записи в /etc/apt/sources.list
+      replace:
+        path: /etc/apt/sources.list
+        regexp: '^(?!#)(.*)$'  # Все строки, не начинающиеся с #
+        replace: '#\1'         # Закомментировать
+    - name: Add new repository entries
+      lineinfile:
+        path: /etc/apt/sources.list
+        line: "{{ item }}"
+        state: present
+      loop:
+        - "deb http://mirror.yandex.ru/debian/ bullseye main"
+        - "deb-src http://mirror.yandex.ru/debian/ bullseye main"
+        - "deb http://mirror.yandex.ru/debian-security bullseye-security main contrib"
+        - "deb-src http://mirror.yandex.ru/debian-security bullseye-security main contrib"
+        - "deb http://mirror.yandex.ru/debian/ bullseye-updates main contrib"
+        - "deb-src http://mirror.yandex.ru/debian/ bullseye-updates main contrib"
+
+    - name: Update sources.list
+      command: apt-get update
+    - name: Обновить установленные пакеты
+      apt:
+        upgrade: dist

@@ -1,0 +1,36 @@
+- name: Add the new user 'kali'
+  hosts: debian1
+  become: true
+  become_method: su
+  become_user: root
+#  become_flags: '-s /bin/sh'
+  tasks:
+  - name: add kali
+    user:
+      name: kali
+      comment: kali
+      group: users
+      create_home: yes
+      shell: /bin/bash
+  - name: Create directory /home/kali/.ssh
+    ansible.builtin.file:
+      path: /home/kali/.ssh
+      state: directory
+      owner: kali
+      group: users
+      mode: '0700'
+  - name: Copy id_rsa.pub in authorized_keys
+    copy:
+      src:  /home/kali/.ssh/id_rsa.pub
+      dest: /home/kali/.ssh/authorized_keys
+      owner: kali
+      group: users
+      mode: '0600'
+  - name: Creating a file with content
+    copy:
+      dest: "/etc/sudoers.d/kali"
+      owner: root
+      group: root
+      mode: '0644'
+      content: |
+        kali ALL=(ALL) NOPASSWD: ALL

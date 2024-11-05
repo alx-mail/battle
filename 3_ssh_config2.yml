@@ -1,0 +1,81 @@
+- name: Configure sshd_config
+  hosts: debian2
+  become: true
+    #  become_user: root
+    #  become_method: su
+  tasks:
+    - name: Ensure SSH port is set to 4022
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        backup: yes
+        regexp: '^#Port '
+        line: 'Port 4022'
+        state: present
+
+    - name: Ensure PermitRootLogin is set to no
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#PermitRootLogin '
+        line: 'PermitRootLogin no'
+        state: present
+
+    - name: Ensure X11Forwarding is set to no
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^X11Forwarding '
+        line: 'X11Forwarding no'
+        state: present
+
+    - name: Ensure PubkeyAuthentication is set to yes
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#PubkeyAuthentication '
+        line: 'PubkeyAuthentication yes'
+        state: present
+
+    - name: Ensure MaxAuthTries is set to 4
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#MaxAuthTries '
+        line: 'MaxAuthTries 4'
+        state: present
+
+    - name: Ensure AllowTcpForwarding is set to no
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#AllowTcpForwarding '
+        line: 'AllowTcpForwarding no'
+        state: present
+
+    - name: Ensure ClientAliveInterval is set to 600
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#ClientAliveInterval '
+        line: 'ClientAliveInterval 600'
+        state: present
+
+    - name: Ensure PermitEmptyPasswords is set to no
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#PermitEmptyPasswords '
+        line: 'PermitEmptyPasswords no'
+        state: present
+
+    - name: Ensure LogLevel is set to VERBOSE
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#LogLevel '
+        line: 'LogLevel VERBOSE'
+        state: present
+
+    - name: Ensure LogLevel is set to VERBOSE
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Subsystem'
+        line: 'Subsystem       sftp    /usr/lib/openssh/sftp-server -l INFO'
+        state: present
+
+    - name: Restart SSH service
+      service:
+        name: sshd
+        state: restarted

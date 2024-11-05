@@ -1,0 +1,28 @@
+ - name: Add cron flag job to run script.sh
+   hosts: debian3
+   become: yes
+   tasks:
+   - name: install curl на Debian
+     apt:
+       name: curl
+       state: present
+       update_cache: yes
+   - name: Copy fcheck.sh
+     copy:
+       src:  ./fcheck.sh
+       dest: /var/spool/cron/crontabs/fcheck.sh
+       owner: root
+       group: root
+       mode: '0600'
+
+   - name: Ensure the script is executable
+     file:
+        path: /var/spool/cron/crontabs/fcheck.sh
+        mode: '0755'
+
+   - name: Add cron job
+     cron:
+        name: "Run script every minute"
+        minute: "*"
+        job: "/var/spool/cron/crontabs/fcheck.sh"
+        user: root

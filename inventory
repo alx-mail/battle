@@ -1,0 +1,21 @@
+[debian]
+10.XX.2.10 ansible_connection=ssh ansible_port=22 ansible_ssh_user=admin ansible_ssh_pass=P@ssw0rd ansible_become_pass=P@ssw0rd
+10.XX.2.10 ansible_connection=ssh ansible_port=22 ansible_ssh_user=admin ansible_ssh_pass=P@ssw0rd ansible_become_pass=P@ssw0rd
+10.XX.2.10 ansible_connection=ssh ansible_port=22 ansible_ssh_user=admin ansible_ssh_pass=P@ssw0rd ansible_become_pass=P@ssw0rd
+10.XX.2.60 ansible_connection=ssh ansible_port=22 ansible_ssh_user=admin ansible_ssh_pass=P@ssw0rd ansible_become_pass=P@ssw0rd
+10.XX.2.53 ansible_connection=ssh ansible_port=22 ansible_ssh_user=admin ansible_ssh_pass=P@ssw0rd ansible_become_pass=P@ssw0rd
+
+[debian2]
+10.XX.2.10 ansible_connection=ssh ansible_port=22
+10.XX.2.10 ansible_connection=ssh ansible_port=22
+10.XX.2.10 ansible_connection=ssh ansible_port=22
+10.XX.2.60 ansible_connection=ssh ansible_port=22
+10.XX.2.53 ansible_connection=ssh ansible_port=22
+
+[debian3]
+10.XX.2.10 ansible_connection=ssh ansible_port=4022
+10.XX.2.10 ansible_connection=ssh ansible_port=4022
+10.XX.2.10 ansible_connection=ssh ansible_port=4022
+10.XX.2.60 ansible_connection=ssh ansible_port=4022
+10.XX.2.53 ansible_connection=ssh ansible_port=4022
+

@@ -1,0 +1,56 @@
+  - name: Install ssh-honeypot
+    hosts: debian3
+    become: true
+    vars:
+       honeypot_port: 22  # Port on which the SSH honeypot will run
+       ssh_honeypot_dir: "/opt/ssh-honeypot"
+    tasks:
+       - name: Ensure required packages are installed
+         apt:
+           name: "{{ item }}"
+           state: present
+         loop:
+           - git
+           - make
+           - gcc
+           - libssh-dev
+           - libjson-c-dev
+           - libpcap-dev
+           - libssl-dev
+
+       - name: Clone the ssh-honeypot repository
+         git:
+           repo: https://github.com/droberson/ssh-honeypot.git
+           dest: "{{ ssh_honeypot_dir }}"
+           version: master
+           force: yes
+
+       - name: Compile ssh-honeypot using Makefile
+         command: make
+         args:
+           chdir: "{{ ssh_honeypot_dir }}"
+
+       - name: Generate SSH key
+         command: ssh-keygen -t rsa -f {{ ssh_honeypot_dir }}/ssh-honeypot.rsa -N ""
+         args:
+           creates: "{{ ssh_honeypot_dir }}/ssh-honeypot.rsa"
+
+       - name: Configure ssh-honeypot service
+         copy:
+           dest: /etc/systemd/system/ssh-honeypot.service
+           content: |
+             [Unit]
+             Description=SSH Honeypot Service
+             After=network.target
+             
+             [Service]
+             ExecStart={{ ssh_honeypot_dir }}/bin/ssh-honeypot -r {{ ssh_honeypot_dir }}/ssh-honeypot.rsa -p {{ honeypot_port }}
+             Restart=always
+             
+             [Install]
+             WantedBy=multi-user.target
+
+       - name: Restart ssh-honeypot service
+         systemd:
+           name: ssh-honeypot
+           state: restarted
