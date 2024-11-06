@@ -1,6 +1,5 @@
 /usr/sbin/iptables -A INPUT -p tcp -s 10.104.5.0/24 --dport=4022 -j ACCEPT
 /usr/sbin/iptables -A INPUT -p tcp -s 10.104.5.0/24 --dport=22 -j ACCEPT
-/usr/sbin/iptables -A INPUT -p tcp --dport=8080 -j ACCEPT
 /usr/sbin/iptables -A INPUT -p tcp --dport=80 -j ACCEPT
 /usr/sbin/iptables -A INPUT -p tcp -s 10.104.3.17 --dport=1300 -j ACCEPT
 /usr/sbin/iptables -A INPUT -p udp -s 10.104.3.17 --dport=1300 -j ACCEPT
